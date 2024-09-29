@@ -52,7 +52,7 @@ public class bookingController {
      */
     @PostMapping(value = "/booking/{bookingId}/transaction", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BookingDetailsDTO> processPayment(@PathVariable(name = "bookingId") int bookingId, @RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<Object> processPayment(@PathVariable(name = "bookingId") int bookingId, @RequestBody PaymentDTO paymentDTO) {
 
         if (!bookingService.isValidPaymentService(paymentDTO.getPaymentMode())) {
             throw new PaymentException("Invalid mode of payment");
@@ -67,7 +67,7 @@ public class bookingController {
 
         BookingInfoEntity updatedBookingDetails = bookingService.updateTransactionID(paymentDTO);
         if (updatedBookingDetails == null) {
-            return new ResponseEntity("Error during payment", HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>("Error during payment", HttpStatus.SERVICE_UNAVAILABLE);
         }
 
         BookingDetailsDTO updatedBookingDto = CustomMapper.convertEntityToDTO(updatedBookingDetails);
